@@ -38,14 +38,15 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
+#define MAJOR 0
+#define MINOR 1
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
-
+uint8_t BL_Version[2] = {MAJOR, MINOR};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -53,7 +54,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN PFP */
-
+static void goto_application(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -91,13 +92,21 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  printf("Bootloader %d:%d Started!!", BL_Version[0], BL_Version[1]);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  uint8_t i = 0;
   while (1)
   {
+
+    for( i = 0; i< 20; i++)
+    {
+      HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_4);
+      HAL_Delay(100);
+    }
+    goto_application();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -208,6 +217,30 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
+#ifdef __GNUC__
+	/* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
+	 set to 'Yes') calls __io_putchar() */
+   
+int __io_putchar(int ch)
+#else
+int fputc(int ch, FILE *f)
+#endif /* __GNUC__*/
+  {
+    /* Place your implementation of fputc here */
+    /* e.g. write a character to the EVAL_COM1 and Loop until the end of transmission */
+
+    HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, HAL_MAX_DELAY);
+   return ch;
+
+  }
+
+  static void goto_application(void)
+  {
+    printf("Gonna Jump to Application...\n");
+    void (*app_reset_handler) (void) = (void*)(*((volatile uint32_t*) (0x8004400 +4U)));
+
+    app_reset_handler();
+  }
 /* USER CODE END 4 */
 
 /**
