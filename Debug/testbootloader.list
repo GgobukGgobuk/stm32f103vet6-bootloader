@@ -132,28 +132,27 @@ int main(void)
     for( i = 0; i< 20; i++)
  8000250:	2300      	movs	r3, #0
  8000252:	71fb      	strb	r3, [r7, #7]
- 8000254:	e009      	b.n	800026a <main+0x46>
+ 8000254:	e00a      	b.n	800026c <main+0x48>
     {
-      HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_4);
- 8000256:	2110      	movs	r1, #16
- 8000258:	4809      	ldr	r0, [pc, #36]	; (8000280 <main+0x5c>)
- 800025a:	f000 fd61 	bl	8000d20 <HAL_GPIO_TogglePin>
+      HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
+ 8000256:	f44f 5180 	mov.w	r1, #4096	; 0x1000
+ 800025a:	4809      	ldr	r0, [pc, #36]	; (8000280 <main+0x5c>)
+ 800025c:	f000 fd60 	bl	8000d20 <HAL_GPIO_TogglePin>
       HAL_Delay(100);
- 800025e:	2064      	movs	r0, #100	; 0x64
- 8000260:	f000 faaa 	bl	80007b8 <HAL_Delay>
+ 8000260:	2064      	movs	r0, #100	; 0x64
+ 8000262:	f000 faa9 	bl	80007b8 <HAL_Delay>
     for( i = 0; i< 20; i++)
- 8000264:	79fb      	ldrb	r3, [r7, #7]
- 8000266:	3301      	adds	r3, #1
- 8000268:	71fb      	strb	r3, [r7, #7]
- 800026a:	79fb      	ldrb	r3, [r7, #7]
- 800026c:	2b13      	cmp	r3, #19
- 800026e:	d9f2      	bls.n	8000256 <main+0x32>
+ 8000266:	79fb      	ldrb	r3, [r7, #7]
+ 8000268:	3301      	adds	r3, #1
+ 800026a:	71fb      	strb	r3, [r7, #7]
+ 800026c:	79fb      	ldrb	r3, [r7, #7]
+ 800026e:	2b13      	cmp	r3, #19
+ 8000270:	d9f1      	bls.n	8000256 <main+0x32>
     }
     goto_application();
- 8000270:	f000 f8c6 	bl	8000400 <goto_application>
+ 8000272:	f000 f8c5 	bl	8000400 <goto_application>
     for( i = 0; i< 20; i++)
- 8000274:	e7ec      	b.n	8000250 <main+0x2c>
- 8000276:	bf00      	nop
+ 8000276:	e7eb      	b.n	8000250 <main+0x2c>
  8000278:	20000000 	.word	0x20000000
  800027c:	08002988 	.word	0x08002988
  8000280:	40011400 	.word	0x40011400
